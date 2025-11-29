@@ -4,12 +4,12 @@ This document tracks the engineering tasks required to build TeamShop.
 
 ## Phase 1 — Project Setup & Standards
 
-- [ ] 1.1. Initialize Django project and GitLab repository (P1, P12 — R15, R17)
-- [ ] 1.2. Initialize React project with Vite (P1 — R14)
-- [ ] 1.3. Configure Tailwind CSS in React (P1 — R14)
-- [ ] 1.4. Set up concurrent development script (P1 — R14, R15)
-- [ ] 1.5. Configure Black and Flake8 for Django (P12 — R21)
-- [ ] 1.6. Configure ESLint and Prettier for React (P12 — R21)
+- [x] 1.1. Initialize Django project and GitLab repository (P1, P12 — R15, R17)
+- [x] 1.2. Initialize React project with Vite (P1 — R14)
+- [x] 1.3. Configure Tailwind CSS in React (P1 — R14)
+- [x] 1.4. Set up concurrent development script (P1 — R14, R15)
+- [x] 1.5. Configure Black and Flake8 for Django (P12 — R21)
+- [x] 1.6. Configure ESLint and Prettier for React (P12 — R21)
 
 ## Phase 2 — Backend Core (Django)
 

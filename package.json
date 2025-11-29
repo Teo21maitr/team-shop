@@ -1,0 +1,29 @@
+{
+  "name": "teo21maitr-team-shop",
+  "version": "1.0.0",
+  "description": "TeamShop is a mobile-first web application allowing users to create, share, and collaboratively manage shopping lists in real time — without authentication.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && source venv/bin/activate && python manage.py runserver",
+    "dev:frontend": "cd frontend && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/teo21maitr-group/teo21maitr-team-shop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/teo21maitr-group/teo21maitr-team-shop/issues"
+  },
+  "homepage": "https://gitlab.com/teo21maitr-group/teo21maitr-team-shop#readme",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
