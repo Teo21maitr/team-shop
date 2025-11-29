@@ -142,3 +142,33 @@ TeamShop is a **mobile-first web application** designed to streamline the grocer
 > **Acceptance Criteria:**
 > - The architecture SHALL be deployable on low-cost VPS or free-tier PaaS options.
 > - The database SHALL be lightweight (e.g., SQLite for MVP or small PostgreSQL).
+
+#### R17. Versioned project
+> **User Story:** As a project owner, I want tu use GitLab to version my project.
+> **Acceptance Criteria:**
+> - The project SHALL be versioned on GitLab.
+
+#### R18. French Language
+> **User Story:** As a user, I want the interface to be in French.
+> **Acceptance Criteria:**
+> - The interface SHALL be in French.
+
+#### R19. Responsive Design
+> **User Story:** As a user, I want the interface to be responsive.
+> **Acceptance Criteria:**
+> - The interface SHALL be responsive.
+
+### R20. SOLID Principles
+> **User Story:** As a developer, I want to follow the SOLID principles.
+> **Acceptance Criteria:**
+> - The architecture SHALL follow the SOLID principles. 
+
+### R21. Clean Code
+> **User Story:** As a developer, I want to write clean code.
+> **Acceptance Criteria:**
+> - The code SHALL be clean and easy to read.
+> - The code SHALL be easy to maintain.
+> - The code SHALL be easy to test.
+> - The code SHALL be easy to debug.
+
+

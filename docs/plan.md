@@ -12,8 +12,19 @@ This document outlines the technical plan to implement TeamShop based on the req
   - Use `django-admin startproject` for backend.
   - Use `vite` for fast React scaffolding.
   - Configure `concurrently` or a Makefile to run both servers during dev.
+  - Initialize GitLab repository for version control (R17).
 - **Dependencies:** None
-- **Covers Requirements:** R14, R15
+- **Covers Requirements:** R14, R15, R17
+- **Priority:** High
+
+#### P12. Code Quality & Standards
+- **Description:** Enforce code quality standards, SOLID principles, and clean code practices across the stack.
+- **Technical Decisions:**
+  - **Backend:** Use `Black` and `Flake8` for Python linting/formatting. Structure business logic in Services or Managers to keep Views thin (SOLID - Single Responsibility) (R20, R21).
+  - **Frontend:** Use `ESLint` and `Prettier` for React. Component composition to avoid prop drilling and large components (SOLID) (R20, R21).
+  - **Versioning:** Commit messages should follow conventional commits (R17).
+- **Dependencies:** P1
+- **Covers Requirements:** R17, R20, R21
 - **Priority:** High
 
 ### Backend (Django)
@@ -63,14 +74,15 @@ This document outlines the technical plan to implement TeamShop based on the req
 
 ### Frontend (React + Tailwind)
 
-#### P6. Mobile-First Layout
-- **Description:** Create the base layout and routing.
+#### P6. Mobile-First & Responsive Layout
+- **Description:** Create the base layout and routing, ensuring responsiveness and French localization.
 - **Technical Decisions:**
   - Use `react-router-dom`.
-  - Implement a responsive container that mimics a mobile app view.
+  - Implement a responsive container that mimics a mobile app view but scales to desktop (R19).
   - Configure Tailwind theme for "Orange" (claiming) and "Green" (done) states.
+  - Hardcode UI text in French (R18).
 - **Dependencies:** P1
-- **Covers Requirements:** R13, R14
+- **Covers Requirements:** R13, R14, R18, R19
 - **Priority:** High
 
 #### P7. List Interaction UI

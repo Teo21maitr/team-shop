@@ -2,12 +2,14 @@
 
 This document tracks the engineering tasks required to build TeamShop.
 
-## Phase 1 — Project Setup
+## Phase 1 — Project Setup & Standards
 
-- [ ] 1.1. Initialize Django project and Git repository (P1 — R15)
+- [ ] 1.1. Initialize Django project and GitLab repository (P1, P12 — R15, R17)
 - [ ] 1.2. Initialize React project with Vite (P1 — R14)
 - [ ] 1.3. Configure Tailwind CSS in React (P1 — R14)
 - [ ] 1.4. Set up concurrent development script (P1 — R14, R15)
+- [ ] 1.5. Configure Black and Flake8 for Django (P12 — R21)
+- [ ] 1.6. Configure ESLint and Prettier for React (P12 — R21)
 
 ## Phase 2 — Backend Core (Django)
 
@@ -17,15 +19,17 @@ This document tracks the engineering tasks required to build TeamShop.
 - [ ] 2.4. Implement GET `/api/lists/{id}` endpoint (P3 — R3, R4)
 - [ ] 2.5. Implement POST `/api/lists/{id}/items` endpoint (P3 — R5)
 - [ ] 2.6. Implement PATCH/DELETE `/api/items/{id}` endpoints (P3 — R6)
+- [ ] 2.7. Refactor business logic to Services/Managers to follow SOLID (P12 — R20)
 
 ## Phase 3 — Frontend Core (React + Tailwind)
 
-- [ ] 3.1. Create Landing Page with "Create List" and "Join List" forms (P6 — R1, R3)
+- [ ] 3.1. Create Landing Page with "Create List" and "Join List" forms (French text) (P6 — R1, R3, R18)
 - [ ] 3.2. Create List View layout (mobile-first container) (P6 — R13)
 - [ ] 3.3. Implement `AddItemForm` component (P7 — R5)
 - [ ] 3.4. Implement `ItemRow` component for basic display (P7 — R5)
 - [ ] 3.5. Connect frontend to API for creating/joining lists (P7 — R1, R3)
 - [ ] 3.6. Connect frontend to API for adding/deleting items (P7 — R5, R6)
+- [ ] 3.7. Verify responsive design on desktop/tablet (P6 — R19)
 
 ## Phase 4 — Real-Time Sync
 
@@ -55,6 +59,7 @@ This document tracks the engineering tasks required to build TeamShop.
 - [ ] 7.1. Polish mobile UI (touch targets, spacing) (P6 — R13)
 - [ ] 7.2. Add animations for item additions/removals (P6 — R13)
 - [ ] 7.3. Ensure error states are handled gracefully (P3 — R4)
+- [ ] 7.4. Review all text for correct French grammar/tone (P6 — R18)
 
 ## Phase 8 — Deployment & Hosting
 
