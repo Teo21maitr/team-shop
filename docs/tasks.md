@@ -13,23 +13,23 @@ This document tracks the engineering tasks required to build TeamShop.
 
 ## Phase 2 — Backend Core (Django)
 
-- [ ] 2.1. Create `ShoppingList` and `Item` models (P2 — R1, R2, R5)
-- [ ] 2.2. Create `UserSession` model or mechanism for anonymous ID (P2 — R1)
-- [ ] 2.3. Implement POST `/api/lists/create` endpoint (P3 — R1)
-- [ ] 2.4. Implement GET `/api/lists/{id}` endpoint (P3 — R3, R4)
-- [ ] 2.5. Implement POST `/api/lists/{id}/items` endpoint (P3 — R5)
-- [ ] 2.6. Implement PATCH/DELETE `/api/items/{id}` endpoints (P3 — R6)
-- [ ] 2.7. Refactor business logic to Services/Managers to follow SOLID (P12 — R20)
+- [x] 2.1. Create `ShoppingList` and `Item` models (P2 — R1, R2, R5)
+- [x] 2.2. Create `UserSession` model or mechanism for anonymous ID (P2 — R1)
+- [x] 2.3. Implement POST `/api/lists/create` endpoint (P3 — R1)
+- [x] 2.4. Implement GET `/api/lists/{id}` endpoint (P3 — R3, R4)
+- [x] 2.5. Implement POST `/api/lists/{id}/items` endpoint (P3 — R5)
+- [x] 2.6. Implement PATCH/DELETE `/api/items/{id}` endpoints (P3 — R6)
+- [x] 2.7. Refactor business logic to Services/Managers to follow SOLID (P12 — R20)
 
 ## Phase 3 — Frontend Core (React + Tailwind)
 
-- [ ] 3.1. Create Landing Page with "Create List" and "Join List" forms (French text) (P6 — R1, R3, R18)
-- [ ] 3.2. Create List View layout (mobile-first container) (P6 — R13)
-- [ ] 3.3. Implement `AddItemForm` component (P7 — R5)
-- [ ] 3.4. Implement `ItemRow` component for basic display (P7 — R5)
-- [ ] 3.5. Connect frontend to API for creating/joining lists (P7 — R1, R3)
-- [ ] 3.6. Connect frontend to API for adding/deleting items (P7 — R5, R6)
-- [ ] 3.7. Verify responsive design on desktop/tablet (P6 — R19)
+- [x] 3.1. Create Landing Page with "Create List" and "Join List" forms (French text) (P6 — R1, R3, R18)
+- [x] 3.2. Create List View layout (mobile-first container) (P6 — R13)
+- [x] 3.3. Implement `AddItemForm` component (P7 — R5)
+- [x] 3.4. Implement `ItemRow` component for basic display (P7 — R5)
+- [x] 3.5. Connect frontend to API for creating/joining lists (P7 — R1, R3)
+- [x] 3.6. Connect frontend to API for adding/deleting items (P7 — R5, R6)
+- [x] 3.7. Verify responsive design on desktop/tablet (P6 — R19)
 
 ## Phase 4 — Real-Time Sync
 
