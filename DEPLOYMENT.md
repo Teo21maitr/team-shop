@@ -84,13 +84,13 @@ In Railway dashboard, go to **Variables** and add:
 # Required
 DEBUG=False
 SECRET_KEY=your-super-secret-key-here-make-it-long-and-random
-ALLOWED_HOSTS=your-app-name.railway.app
+ALLOWED_HOSTS=team-shop.railway.app
 
 # Optional - if you added PostgreSQL, this is automatic
 # DATABASE_URL=(automatically set by Railway)
 
 # CORS - Railway will provide you with a domain
-CORS_ALLOWED_ORIGINS=https://your-app-name.railway.app
+CORS_ALLOWED_ORIGINS=https://team-shop.railway.app
 ```
 
 To generate a secret key:

@@ -37,5 +37,5 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Run migrations and start server
-CMD python manage.py migrate && \
-    daphne -b 0.0.0.0 -p 8000 teamshop.asgi:application
+# Use shell form to support shell commands
+CMD python manage.py migrate && daphne -b 0.0.0.0 -p ${PORT:-8000} teamshop.asgi:application
