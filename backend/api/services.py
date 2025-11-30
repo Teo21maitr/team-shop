@@ -29,10 +29,42 @@ class ShoppingListService:
         Reset a shopping list after shopping:
         - Delete all 'bought' items
         - Reset 'claimed' items to 'pending'
+        - Broadcast LIST_RESET event
         """
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+        from .serializers import ShoppingListSerializer
+
+        # Perform bulk updates
         shopping_list.items.filter(status="bought").delete()
         shopping_list.items.filter(status="claimed").update(
             status="pending", claimed_by=None
+        )
+
+        print(f"Resetting list {shopping_list.list_id}")
+        for item in shopping_list.items.all():
+            print(f"Item {item.name} is now {item.status}")
+
+        # Broadcast reset event with fresh list data
+        channel_layer = get_channel_layer()
+        
+        # Re-fetch the list to ensure we have the latest items state
+        # This prevents sending stale data if the relation was cached
+        updated_list = ShoppingList.objects.get(pk=shopping_list.pk)
+        serializer = ShoppingListSerializer(updated_list)
+        
+        print(f"Broadcasting LIST_RESET for {shopping_list.list_id}")
+
+        for item in shopping_list.items.all():
+            print(f"Item {item.name} is now {item.status}")
+        
+        async_to_sync(channel_layer.group_send)(
+            f"list_{shopping_list.list_id}",
+            {
+                "type": "list_reset",
+                "event": "LIST_RESET",
+                "list": serializer.data,
+            },
         )
 
 
