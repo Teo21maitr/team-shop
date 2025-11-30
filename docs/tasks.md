@@ -41,31 +41,31 @@ This document tracks the engineering tasks required to build TeamShop.
 
 ## Phase 5 — Shopping Mode
 
-- [ ] 5.1. Implement "Shopping Mode" toggle in UI (P7 — R8)
-- [ ] 5.2. Create "Pseudo" entry modal/prompt (P9 — R8)
-- [ ] 5.3. Implement "Claim" logic (Orange state) (P9 — R9)
-- [ ] 5.4. Implement "Validate" logic (Green state) (P9 — R10)
-- [ ] 5.5. Enforce ownership locks in backend (P9 — R11)
-- [ ] 5.6. Enforce ownership locks in frontend UI (P9 — R11)
+- [x] 5.1. Implement "Shopping Mode" toggle in UI (P7 — R8)
+- [x] 5.2. Create "Pseudo" entry modal/prompt (P9 — R8)
+- [x] 5.3. Implement "Claim" logic (Orange state) (P9 — R9)
+- [x] 5.4. Implement "Validate" logic (Green state) (P9 — R10)
+- [x] 5.5. Enforce ownership locks in backend (P9 — R11)
+- [x] 5.6. Enforce ownership locks in frontend UI (P9 — R11)
 
 ## Phase 6 — End-of-Shopping Flow
 
-- [ ] 6.1. Implement POST `/api/lists/{id}/reset` endpoint (P10 — R12)
-- [ ] 6.2. Add "Finish Shopping" button and confirmation (P10 — R12)
-- [ ] 6.3. Handle list reset event via WebSockets (P10 — R7, R12)
+- [x] 6.1. Implement POST `/api/lists/{id}/reset` endpoint (P10 — R12)
+- [x] 6.2. Add "Finish Shopping" button and confirmation (P10 — R12)
+- [x] 6.3. Handle list reset event via WebSockets (P10 — R7, R12)
 
 ## Phase 7 — Design & UX Pass
 
-- [ ] 7.1. Polish mobile UI (touch targets, spacing) (P6 — R13)
-- [ ] 7.2. Add animations for item additions/removals (P6 — R13)
-- [ ] 7.3. Ensure error states are handled gracefully (P3 — R4)
-- [ ] 7.4. Review all text for correct French grammar/tone (P6 — R18)
+- [x] 7.1. Polish mobile UI (touch targets, spacing) (P6 — R13)
+- [x] 7.2. Add animations for item additions/removals (P6 — R13)
+- [x] 7.3. Ensure error states are handled gracefully (P3 — R4)
+- [x] 7.4. Review all text for correct French grammar/tone (P6 — R18)
 
 ## Phase 8 — Deployment & Hosting
 
-- [ ] 8.1. Configure Whitenoise for static files (P11 — R16)
-- [ ] 8.2. Create Dockerfile (optional) (P11 — R16)
-- [ ] 8.3. Verify production build locally (P11 — R16)
+- [x] 8.1. Configure Whitenoise for static files (P11 — R16)
+- [x] 8.2. Create Dockerfile (optional) (P11 — R16)
+- [x] 8.3. Verify production build locally (P11 — R16)
 
 ## Phase 9 — Testing & QA
 

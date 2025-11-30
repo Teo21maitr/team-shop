@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { listApi, itemApi } from '../services/api';
 import ItemRow from '../components/ItemRow';
 import AddItemForm from '../components/AddItemForm';
+import PseudoModal from '../components/PseudoModal';
 import useWebSocket from '../hooks/useWebSocket';
 
 /**
@@ -16,6 +17,8 @@ export default function ListView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentPseudo, setCurrentPseudo] = useState('');
+  const [isShoppingMode, setIsShoppingMode] = useState(false);
+  const [showPseudoModal, setShowPseudoModal] = useState(false);
 
   // Handle WebSocket messages for real-time updates
   const handleWebSocketMessage = useCallback((data) => {
@@ -50,6 +53,12 @@ export default function ListView() {
           items: prevList.items.filter((item) => item.id !== data.item_id),
         };
       });
+    } else if (data.event === 'LIST_RESET' && data.list) {
+      console.log('LIST_RESET event received', data.list);
+      // Replace entire list state with fresh data from server
+      setList(data.list);
+      // Exit shopping mode for everyone
+      setIsShoppingMode(false);
     }
   }, []);
 
@@ -92,7 +101,13 @@ export default function ListView() {
       await itemApi.addItem(listId, name);
       // No need to refresh - WebSocket will update automatically
     } catch (err) {
-      alert("Erreur lors de l'ajout de l'article");
+      if (err.response?.status === 404) {
+        alert('❌ Liste introuvable. Veuillez vérifier le code.');
+      } else if (err.response?.status >= 500) {
+        alert('⚠️ Erreur serveur. Veuillez réessayer.');
+      } else {
+        alert("❌ Impossible d'ajouter l'article. Vérifiez votre connexion.");
+      }
       console.error(err);
     }
   };
@@ -103,9 +118,11 @@ export default function ListView() {
       // No need to refresh - WebSocket will update automatically
     } catch (err) {
       if (err.response?.status === 403) {
-        alert('Cet article est verrouillé par un autre utilisateur');
+        alert('🔒 Cet article est en cours de récupération par quelqu\'un d\'autre.');
+      } else if (err.response?.status === 404) {
+        alert('❌ Article introuvable.');
       } else {
-        alert('Erreur lors de la suppression');
+        alert('❌ Impossible de supprimer l\'article. Veuillez réessayer.');
       }
       console.error(err);
     }
@@ -114,6 +131,66 @@ export default function ListView() {
   const handleCopyCode = () => {
     navigator.clipboard.writeText(listId);
     alert('Code copié !');
+  };
+
+  const toggleShoppingMode = () => {
+    if (!isShoppingMode && !currentPseudo) {
+      setShowPseudoModal(true);
+    } else {
+      setIsShoppingMode(!isShoppingMode);
+    }
+  };
+
+  const handleSavePseudo = (pseudo) => {
+    localStorage.setItem('teamshop_pseudo', pseudo);
+    setCurrentPseudo(pseudo);
+    setShowPseudoModal(false);
+    setIsShoppingMode(true);
+  };
+
+  const handleItemClick = async (item) => {
+    if (!isShoppingMode) return;
+
+    try {
+      if (item.status === 'pending') {
+        // Claim item
+        await itemApi.updateItem(item.id, {
+          status: 'claimed',
+          claimed_by: currentPseudo,
+          current_pseudo: currentPseudo,
+        });
+      } else if (item.status === 'claimed' && item.claimed_by === currentPseudo) {
+        // Validate item (bought)
+        await itemApi.updateItem(item.id, {
+          status: 'bought',
+          current_pseudo: currentPseudo,
+        });
+      }
+    } catch (err) {
+      console.error('Error updating item:', err);
+      if (err.response?.status === 403) {
+        alert('🔒 Un autre utilisateur a déjà pris cet article.');
+      } else if (err.response?.status === 404) {
+        alert('❌ Article introuvable.');
+      } else {
+        alert('❌ Impossible de modifier l\'article. Vérifiez votre connexion.');
+      }
+    }
+  };
+
+  const handleResetList = async () => {
+    try {
+      await listApi.resetList(listId);
+      // WebSocket will handle the list update and mode change
+      // Don't update state here to avoid race conditions
+    } catch (err) {
+      console.error('Error resetting list:', err);
+      if (err.response?.status >= 500) {
+        alert('⚠️ Erreur serveur. Impossible de terminer les courses.');
+      } else {
+        alert('❌ Erreur lors de la réinitialisation. Veuillez réessayer.');
+      }
+    }
   };
 
   if (loading) {
@@ -135,7 +212,8 @@ export default function ListView() {
           <p className="text-gray-800 font-semibold mb-4">{error}</p>
           <button
             onClick={() => navigate('/')}
-            className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700"
+            className="bg-indigo-600 text-white px-6 py-3 min-h-[48px] rounded-lg hover:bg-indigo-700 transition-all duration-200 active:scale-95"
+            aria-label="Retour à l'accueil"
           >
             Retour à l'accueil
           </button>
@@ -153,24 +231,31 @@ export default function ListView() {
       {/* Header */}
       <div className="bg-white border-b-2 border-gray-200 sticky top-0 z-10 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
             <h1 className="text-2xl font-bold text-gray-800">Ma Liste</h1>
             <button
               onClick={() => navigate('/')}
-              className="text-gray-600 hover:text-gray-800"
+              className="text-gray-600 hover:text-gray-800 min-w-[44px] min-h-[44px] flex items-center justify-center transition-transform active:scale-90"
+              aria-label="Retour à l'accueil"
             >
               ✖️
             </button>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex-1 bg-gray-100 px-4 py-2 rounded-lg">
-              <p className="text-sm text-gray-600">Code de partage</p>
-              <p className="font-mono font-bold text-indigo-600">{listId}</p>
-            </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleShoppingMode}
+              className={`flex-1 px-4 py-3 min-h-[48px] rounded-lg font-medium transition-all duration-200 ${isShoppingMode
+                ? 'bg-green-600 text-white hover:bg-green-700 active:scale-95'
+                : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200 active:scale-95'
+                }`}
+            >
+              {isShoppingMode ? '🛒 Mode Courses' : '✏️ Mode Édition'}
+            </button>
             <button
               onClick={handleCopyCode}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+              className="bg-gray-100 text-gray-600 px-4 py-3 min-h-[48px] min-w-[48px] rounded-lg hover:bg-gray-200 transition-all duration-200 active:scale-90"
               title="Copier le code"
+              aria-label="Copier le code de la liste"
             >
               📋
             </button>
@@ -193,6 +278,8 @@ export default function ListView() {
                   item={item}
                   onDelete={handleDeleteItem}
                   currentPseudo={currentPseudo}
+                  isShoppingMode={isShoppingMode}
+                  onClick={handleItemClick}
                 />
               ))}
             </div>
@@ -212,6 +299,8 @@ export default function ListView() {
                   item={item}
                   onDelete={handleDeleteItem}
                   currentPseudo={currentPseudo}
+                  isShoppingMode={isShoppingMode}
+                  onClick={handleItemClick}
                 />
               ))}
             </div>
@@ -231,6 +320,8 @@ export default function ListView() {
                   item={item}
                   onDelete={handleDeleteItem}
                   currentPseudo={currentPseudo}
+                  isShoppingMode={isShoppingMode}
+                  onClick={handleItemClick}
                 />
               ))}
             </div>
@@ -250,7 +341,30 @@ export default function ListView() {
       </div>
 
       {/* Add Item Form - Sticky Bottom */}
-      <AddItemForm onAdd={handleAddItem} disabled={!list} />
+      {!isShoppingMode && (
+        <AddItemForm onAdd={handleAddItem} disabled={!list} />
+      )}
+
+      {/* Finish Shopping Button - Sticky Bottom for Shopping Mode */}
+      {isShoppingMode && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t-2 border-gray-200 shadow-2xl flex justify-center animate-fadeIn">
+          <button
+            onClick={handleResetList}
+            className="w-full max-w-4xl bg-green-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:bg-green-700 transition-all duration-200 active:scale-95 flex items-center justify-center gap-2 min-h-[56px]"
+            aria-label="Terminer les courses"
+          >
+            <span>🏁</span>
+            <span>Terminer les courses</span>
+          </button>
+        </div>
+      )}
+
+      {/* Pseudo Modal */}
+      <PseudoModal
+        isOpen={showPseudoModal}
+        onClose={() => setShowPseudoModal(false)}
+        onSave={handleSavePseudo}
+      />
     </div>
   );
 }

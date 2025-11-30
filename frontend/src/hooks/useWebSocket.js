@@ -9,6 +9,12 @@ export default function useWebSocket(listId, onMessage) {
     const [isConnected, setIsConnected] = useState(false);
     const wsRef = useRef(null);
     const reconnectTimeoutRef = useRef(null);
+    const onMessageRef = useRef(onMessage);
+
+    // Update the ref whenever onMessage changes
+    useEffect(() => {
+        onMessageRef.current = onMessage;
+    }, [onMessage]);
 
     useEffect(() => {
         if (!listId) return;
@@ -30,8 +36,8 @@ export default function useWebSocket(listId, onMessage) {
                 try {
                     const data = JSON.parse(event.data);
                     console.log('WebSocket message received:', data);
-                    if (onMessage) {
-                        onMessage(data);
+                    if (onMessageRef.current) {
+                        onMessageRef.current(data);
                     }
                 } catch (error) {
                     console.error('Error parsing WebSocket message:', error);
@@ -65,7 +71,7 @@ export default function useWebSocket(listId, onMessage) {
                 wsRef.current.close();
             }
         };
-    }, [listId, onMessage]);
+    }, [listId]); // Only reconnect when listId changes
 
     return { isConnected };
 }
