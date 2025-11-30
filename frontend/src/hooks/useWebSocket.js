@@ -22,7 +22,7 @@ export default function useWebSocket(listId, onMessage) {
         const connectWebSocket = () => {
             // WebSocket URL - adjust protocol based on current protocol
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUrl = `${protocol}//localhost:8000/ws/lists/${listId}/`;
+            const wsUrl = `${protocol}//${window.location.host}/ws/lists/${listId}/`;
 
             const ws = new WebSocket(wsUrl);
             wsRef.current = ws;
