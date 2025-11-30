@@ -34,6 +34,7 @@ class ShoppingListService:
         from channels.layers import get_channel_layer
         from asgiref.sync import async_to_sync
         from .serializers import ShoppingListSerializer
+        import time
 
         # Perform bulk updates
         shopping_list.items.filter(status="bought").delete()
@@ -57,6 +58,10 @@ class ShoppingListService:
 
         for item in shopping_list.items.all():
             print(f"Item {item.name} is now {item.status}")
+        
+        # Small delay to ensure HTTP response completes before WebSocket event
+        # This prevents race conditions where frontend state changes interrupt WebSocket
+        time.sleep(0.1)
         
         async_to_sync(channel_layer.group_send)(
             f"list_{shopping_list.list_id}",
