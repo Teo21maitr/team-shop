@@ -33,11 +33,11 @@ This document tracks the engineering tasks required to build TeamShop.
 
 ## Phase 4 — Real-Time Sync
 
-- [ ] 4.1. Install and configure Django Channels & Daphne (P4 — R7)
-- [ ] 4.2. Create `ListConsumer` and routing (P4 — R7)
-- [ ] 4.3. Implement backend signals to broadcast updates (P5 — R7)
-- [ ] 4.4. Implement WebSocket client in React (P8 — R7)
-- [ ] 4.5. Handle real-time state updates in frontend (P8 — R7)
+- [x] 4.1. Install and configure Django Channels & Daphne (P4 — R7)
+- [x] 4.2. Create `ListConsumer` and routing (P4 — R7)
+- [x] 4.3. Implement backend signals to broadcast updates (P5 — R7)
+- [x] 4.4. Implement WebSocket client in React (P8 — R7)
+- [x] 4.5. Handle real-time state updates in frontend (P8 — R7)
 
 ## Phase 5 — Shopping Mode
 

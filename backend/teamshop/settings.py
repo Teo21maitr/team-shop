@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-7sp)5@7gxnr#v5jsj((n7n7_(t9k928&tp^=+54yrk_8ea88kk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Third-party apps
     "rest_framework",
     "corsheaders",
+    "channels",
     # Local apps
     "api",
 ]
@@ -73,6 +74,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "teamshop.wsgi.application"
+ASGI_APPLICATION = "teamshop.asgi.application"
 
 
 # Database
@@ -142,3 +144,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite dev server
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+# Channels Configuration
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}

@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { listApi, itemApi } from '../services/api';
 import ItemRow from '../components/ItemRow';
 import AddItemForm from '../components/AddItemForm';
+import useWebSocket from '../hooks/useWebSocket';
 
 /**
  * ListView Page - Vue principale de la liste
@@ -16,12 +17,49 @@ export default function ListView() {
   const [error, setError] = useState('');
   const [currentPseudo, setCurrentPseudo] = useState('');
 
+  // Handle WebSocket messages for real-time updates
+  const handleWebSocketMessage = useCallback((data) => {
+    console.log('Handling WebSocket event:', data);
+
+    if (data.event === 'ITEM_ADDED' && data.item) {
+      setList((prevList) => {
+        if (!prevList) return prevList;
+        // Check if item already exists to avoid duplicates
+        const exists = prevList.items.some((item) => item.id === data.item.id);
+        if (exists) return prevList;
+        return {
+          ...prevList,
+          items: [...prevList.items, data.item],
+        };
+      });
+    } else if (data.event === 'ITEM_UPDATED' && data.item) {
+      setList((prevList) => {
+        if (!prevList) return prevList;
+        return {
+          ...prevList,
+          items: prevList.items.map((item) =>
+            item.id === data.item.id ? data.item : item
+          ),
+        };
+      });
+    } else if (data.event === 'ITEM_DELETED' && data.item_id) {
+      setList((prevList) => {
+        if (!prevList) return prevList;
+        return {
+          ...prevList,
+          items: prevList.items.filter((item) => item.id !== data.item_id),
+        };
+      });
+    }
+  }, []);
+
+  // Connect to WebSocket for real-time updates
+  const { isConnected } = useWebSocket(listId, handleWebSocketMessage);
+
   // Load list data
   useEffect(() => {
     loadList();
-    // Poll for updates every 3 seconds (will be replaced by WebSockets in Phase 4)
-    const interval = setInterval(loadList, 3000);
-    return () => clearInterval(interval);
+    // No more polling - WebSocket handles real-time updates!
   }, [listId]);
 
   // Load pseudo from localStorage
@@ -52,7 +90,7 @@ export default function ListView() {
   const handleAddItem = async (name) => {
     try {
       await itemApi.addItem(listId, name);
-      await loadList(); // Refresh list
+      // No need to refresh - WebSocket will update automatically
     } catch (err) {
       alert("Erreur lors de l'ajout de l'article");
       console.error(err);
@@ -62,7 +100,7 @@ export default function ListView() {
   const handleDeleteItem = async (itemId) => {
     try {
       await itemApi.deleteItem(itemId, currentPseudo);
-      await loadList(); // Refresh list
+      // No need to refresh - WebSocket will update automatically
     } catch (err) {
       if (err.response?.status === 403) {
         alert('Cet article est verrouillé par un autre utilisateur');

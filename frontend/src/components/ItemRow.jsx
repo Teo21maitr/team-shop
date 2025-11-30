@@ -4,9 +4,7 @@
  */
 export default function ItemRow({ item, onDelete, currentPseudo }) {
   const handleDelete = () => {
-    if (window.confirm('Supprimer cet article ?')) {
-      onDelete(item.id);
-    }
+    onDelete(item.id);
   };
 
   const getStatusColor = () => {
