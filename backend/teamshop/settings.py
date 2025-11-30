@@ -136,6 +136,12 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Whitenoise configuration for serving static files
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# Add the static directory where we copy frontend build
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+
 # Media files (user uploads) - not used in this app but good practice
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
