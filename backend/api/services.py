@@ -72,6 +72,46 @@ class ShoppingListService:
             },
         )
 
+    @staticmethod
+    def rename_pseudo(shopping_list, old_pseudo, new_pseudo):
+        """
+        Rename a user's pseudo and update all their claimed items.
+        Validates uniqueness within active list session.
+        Broadcasts PSEUDO_RENAMED event to all connected users.
+        """
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+
+        # Validate that new_pseudo is not already in use by another user
+        # Check if any items are claimed by the new pseudo (excluding the current user's items)
+        existing_items = shopping_list.items.filter(
+            claimed_by=new_pseudo, status='claimed'
+        ).exclude(claimed_by=old_pseudo)
+
+        if existing_items.exists():
+            raise ValueError(f"Le pseudo '{new_pseudo}' est déjà utilisé")
+
+        # Update all items claimed by old_pseudo to new_pseudo
+        updated_count = shopping_list.items.filter(
+            claimed_by=old_pseudo, status='claimed'
+        ).update(claimed_by=new_pseudo)
+
+        print(f"Renamed pseudo from '{old_pseudo}' to '{new_pseudo}' for {updated_count} items")
+
+        # Broadcast rename event
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"list_{shopping_list.list_id}",
+            {
+                "type": "pseudo_renamed",
+                "event": "PSEUDO_RENAMED",
+                "old_pseudo": old_pseudo,
+                "new_pseudo": new_pseudo,
+            },
+        )
+
+        return updated_count
+
 
 class ItemService:
     """Service for managing items."""

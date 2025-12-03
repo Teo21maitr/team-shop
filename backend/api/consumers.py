@@ -49,3 +49,7 @@ class ListConsumer(AsyncWebsocketConsumer):
     async def list_reset(self, event):
         """Send list_reset event to WebSocket."""
         await self.send(text_data=json.dumps(event))
+
+    async def pseudo_renamed(self, event):
+        """Send pseudo_renamed event to WebSocket."""
+        await self.send(text_data=json.dumps(event))

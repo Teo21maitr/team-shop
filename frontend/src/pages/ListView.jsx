@@ -4,6 +4,7 @@ import { listApi, itemApi } from '../services/api';
 import ItemRow from '../components/ItemRow';
 import AddItemForm from '../components/AddItemForm';
 import PseudoModal from '../components/PseudoModal';
+import RenameModal from '../components/RenameModal';
 import useWebSocket from '../hooks/useWebSocket';
 
 /**
@@ -19,6 +20,7 @@ export default function ListView() {
   const [currentPseudo, setCurrentPseudo] = useState('');
   const [isShoppingMode, setIsShoppingMode] = useState(false);
   const [showPseudoModal, setShowPseudoModal] = useState(false);
+  const [showRenameModal, setShowRenameModal] = useState(false);
 
   // Handle WebSocket messages for real-time updates
   const handleWebSocketMessage = useCallback((data) => {
@@ -59,6 +61,20 @@ export default function ListView() {
       setList(data.list);
       // Exit shopping mode for everyone
       setIsShoppingMode(false);
+    } else if (data.event === 'PSEUDO_RENAMED' && data.old_pseudo && data.new_pseudo) {
+      console.log('PSEUDO_RENAMED event received', data);
+      // Update all items claimed by the old pseudo to show new pseudo
+      setList((prevList) => {
+        if (!prevList) return prevList;
+        return {
+          ...prevList,
+          items: prevList.items.map((item) =>
+            item.claimed_by === data.old_pseudo
+              ? { ...item, claimed_by: data.new_pseudo }
+              : item
+          ),
+        };
+      });
     }
   }, []);
 
@@ -146,6 +162,42 @@ export default function ListView() {
     setCurrentPseudo(pseudo);
     setShowPseudoModal(false);
     setIsShoppingMode(true);
+  };
+
+  const handleRenamePseudo = async (newPseudo) => {
+    try {
+      // Send rename request to backend
+      const response = await fetch(`/api/lists/${listId}/rename-pseudo/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          old_pseudo: currentPseudo,
+          new_pseudo: newPseudo,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (response.status === 400) {
+          alert(errorData.error || '❌ Ce pseudo est déjà utilisé');
+        } else {
+          alert('❌ Erreur lors du changement de pseudo');
+        }
+        return;
+      }
+
+      // Update localStorage and local state
+      localStorage.setItem('teamshop_pseudo', newPseudo);
+      setCurrentPseudo(newPseudo);
+      setShowRenameModal(false);
+
+      // WebSocket will handle updating claimed items for all users
+    } catch (err) {
+      console.error('Error renaming pseudo:', err);
+      alert('❌ Erreur de connexion. Veuillez réessayer.');
+    }
   };
 
   const handleItemClick = async (item) => {
@@ -251,6 +303,17 @@ export default function ListView() {
             >
               {isShoppingMode ? '🛒 Mode Courses' : '✏️ Mode Édition'}
             </button>
+            {isShoppingMode && currentPseudo && (
+              <button
+                onClick={() => setShowRenameModal(true)}
+                className="bg-indigo-100 text-indigo-700 px-4 py-3 min-h-[48px] rounded-lg hover:bg-indigo-200 transition-all duration-200 active:scale-90 flex items-center gap-2"
+                title="Changer de pseudo"
+                aria-label="Changer de pseudo"
+              >
+                <span>✏️</span>
+                <span className="hidden sm:inline">Pseudo</span>
+              </button>
+            )}
             <button
               onClick={handleCopyCode}
               className="bg-gray-100 text-gray-600 px-4 py-3 min-h-[48px] min-w-[48px] rounded-lg hover:bg-gray-200 transition-all duration-200 active:scale-90"
@@ -364,6 +427,14 @@ export default function ListView() {
         isOpen={showPseudoModal}
         onClose={() => setShowPseudoModal(false)}
         onSave={handleSavePseudo}
+      />
+
+      {/* Rename Modal */}
+      <RenameModal
+        isOpen={showRenameModal}
+        onClose={() => setShowRenameModal(false)}
+        onSave={handleRenamePseudo}
+        currentPseudo={currentPseudo}
       />
     </div>
   );

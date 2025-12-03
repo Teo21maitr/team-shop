@@ -139,3 +139,53 @@ This document outlines the technical plan to implement TeamShop based on the req
 - **Dependencies:** P1-P10
 - **Covers Requirements:** R16
 - **Priority:** Low
+
+---
+
+### Shopping Mode Enhancements
+
+#### P13. Rename Pseudo During Shopping Mode
+- **Description:** Allow users to change their pseudo while actively in shopping mode, with real-time propagation to all users.
+- **Technical Decisions:**
+  - **Frontend:**
+    - Add a "Rename" button visible only when Shopping Mode is active.
+    - Display a modal with validation when button is clicked.
+    - Validate that the new pseudo is not already in use by another active user.
+    - Update `localStorage` with the new pseudo.
+    - Broadcast rename event via WebSocket.
+  - **Backend:**
+    - Create WebSocket event `PSEUDO_RENAMED` with payload: `{old_pseudo, new_pseudo, user_session_id}`.
+    - Validate pseudo uniqueness within the active list session.
+    - Update all items currently claimed by the user (orange state) to reflect the new pseudo.
+  - **Sync Considerations:**
+    - All connected users must see the pseudo change in real-time.
+    - Item tags showing "Taken by [old_pseudo]" must update to "Taken by [new_pseudo]".
+- **Dependencies:** P9 (Pseudo & Claiming Logic), P4 (WebSocket Infrastructure)
+- **Covers Requirements:** R22
+- **Priority:** Medium
+
+#### P14. Easter Egg — Christmas Cat Animation (List P7XELY)
+- **Description:** Trigger a delightful Christmas-themed animation when a user adds an item named "Chat" to the list with ID "P7XELY". The animation is client-side only and visible only to the user who adds the item.
+- **Technical Decisions:**
+  - **Trigger Detection:**
+    - Frontend-only detection when `list_id === "P7XELY"` AND `item.name === "Chat"`.
+    - Trigger immediately after the user submits the item (before or after API call).
+  - **Frontend:**
+    - Create a `ChristmasAnimation` component with:
+      - Falling snowflakes effect (CSS animation or canvas).
+      - Animated cat popping out of a gift box (SVG/GIF or CSS animation).
+      - Text overlay: "Ton bibou t'offre un petit chat pour Noël".
+    - Animation is local to the user's client only (no WebSocket broadcast needed).
+    - Animation should overlay the UI without blocking interactions (position: fixed, z-index, pointer-events: none for decorative elements).
+    - Duration: ~5-10 seconds, then fade out gracefully.
+  - **Backend:**
+    - No backend logic required for this feature.
+  - **Edge Cases:**
+    - Case-sensitive match: Only "Chat" (not "chat" or "CHAT").
+    - List-specific: Only list P7XELY, no other lists.
+    - Non-blocking: Must not interfere with real-time sync or shopping mode.
+    - Client-side only: Animation is personal to the user who added the item.
+- **Dependencies:** P7 (List Interaction UI)
+- **Covers Requirements:** R23
+- **Priority:** Low
+

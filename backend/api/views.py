@@ -129,3 +129,42 @@ def reset_list(request, list_id):
     ShoppingListService.reset_list(shopping_list)
     serializer = ShoppingListSerializer(shopping_list)
     return Response(serializer.data)
+
+
+@api_view(["POST"])
+def rename_pseudo(request, list_id):
+    """
+    POST /api/lists/{list_id}/rename-pseudo/
+    Renommer le pseudo d'un utilisateur.
+    Body: { "old_pseudo": "...", "new_pseudo": "..." }
+    """
+    shopping_list = ShoppingListService.get_list_by_id(list_id)
+    old_pseudo = request.data.get("old_pseudo")
+    new_pseudo = request.data.get("new_pseudo")
+
+    if not old_pseudo or not new_pseudo:
+        return Response(
+            {"error": "Les pseudos ancien et nouveau sont requis"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if old_pseudo == new_pseudo:
+        return Response(
+            {"error": "Le nouveau pseudo doit être différent de l'ancien"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        updated_count = ShoppingListService.rename_pseudo(
+            shopping_list, old_pseudo, new_pseudo
+        )
+        return Response(
+            {
+                "message": "Pseudo renommé avec succès",
+                "old_pseudo": old_pseudo,
+                "new_pseudo": new_pseudo,
+                "updated_items": updated_count,
+            }
+        )
+    except ValueError as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

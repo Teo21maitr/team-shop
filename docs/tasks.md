@@ -71,3 +71,30 @@ This document tracks the engineering tasks required to build TeamShop.
 
 - [ ] 9.1. Test full flow with multiple devices (P1-P10 — R1-R13)
 - [ ] 9.2. Verify real-time latency (P4 — R7)
+
+## Phase 10 — Shopping Mode Enhancements (Rename Feature)
+
+- [x] 10.1. Add "Rename" button in Shopping Mode UI (visible only when active) (P13 — R22)
+- [x] 10.2. Create rename modal with input validation (P13 — R22)
+- [x] 10.3. Implement pseudo uniqueness validation (P13 — R22)
+- [x] 10.4. Update localStorage with new pseudo (P13 — R22)
+- [x] 10.5. Create WebSocket event `PSEUDO_RENAMED` in backend (P13 — R22)
+- [x] 10.6. Broadcast rename event to all connected users (P13 — R22)
+- [x] 10.7. Update claimed item tags with new pseudo (P13 — R22)
+- [x] 10.8. Handle real-time UI updates for pseudo changes (P13 — R22)
+- [ ] 10.9. Test rename with multiple active users (P13 — R22)
+- [ ] 10.10. Test edge case: user has claimed items (orange state) (P13 — R22)
+
+## Phase 11 — Easter Egg (Christmas Cat Animation)
+
+- [ ] 11.1. Create `ChristmasAnimation` component (P14 — R23)
+- [ ] 11.2. Implement falling snowflakes animation (P14 — R23)
+- [ ] 11.3. Create animated cat popping from gift box (P14 — R23)
+- [ ] 11.4. Add text overlay "Ton bibou t'offre un petit chat pour Noël" (P14 — R23)
+- [ ] 11.5. Implement client-side trigger logic: list_id === "P7XELY" AND item.name === "Chat" (P14 — R23)
+- [ ] 11.6. Ensure animation is visible only to user who added the item (client-side only) (P14 — R23)
+- [ ] 11.7. Ensure animation does not block UI interactions (P14 — R23)
+- [ ] 11.8. Set animation duration and fade-out (~5-10 seconds) (P14 — R23)
+- [ ] 11.9. Test case-sensitivity: "Chat" only (not "chat" or "CHAT") (P14 — R23)
+- [ ] 11.10. Test list-specificity: only P7XELY (P14 — R23)
+- [ ] 11.11. Test that animation doesn't interfere with real-time sync (P14 — R23)

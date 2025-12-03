@@ -7,6 +7,8 @@ urlpatterns = [
     path("lists/<str:list_id>/", views.get_list, name="get_list"),
     path("lists/<str:list_id>/items/", views.add_item, name="add_item"),
     path("lists/<str:list_id>/reset/", views.reset_list, name="reset_list"),
+    # Rename pseudo
+    path("lists/<str:list_id>/rename-pseudo/", views.rename_pseudo, name="rename_pseudo"),
     path("items/<int:item_id>/", views.update_item, name="update_item"),
     path("items/<int:item_id>/delete/", views.delete_item, name="delete_item"),
 ]

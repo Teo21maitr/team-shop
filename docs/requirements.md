@@ -9,6 +9,8 @@ TeamShop is a **mobile-first web application** designed to streamline the grocer
 - **Real-Time Sync:** Changes made by one user appear instantly for everyone else.
 - **Shopping Mode:** A dedicated mode for the active shopping trip where items can be "claimed" (orange) to prevent duplicate purchases and "validated" (green) when in the cart.
 - **Smart Reset:** An end-of-shopping flow that clears purchased items and resets the list for the next trip.
+- **Flexible Identity:** Users can change their pseudo at any time during shopping mode for accuracy.
+- **Easter Eggs:** Delightful surprises like the Christmas cat animation on specific lists.
 
 ---
 
@@ -170,5 +172,41 @@ TeamShop is a **mobile-first web application** designed to streamline the grocer
 > - The code SHALL be easy to maintain.
 > - The code SHALL be easy to test.
 > - The code SHALL be easy to debug.
+
+### R. Shopping Mode Enhancements
+
+#### R22. Rename Pseudo During Shopping Mode
+> **User Story:** As a user currently in shopping mode, I want to change my pseudo at any time so that my display name stays accurate.
+> **Acceptance Criteria:**
+> - WHEN a user is in Shopping Mode
+> - THEN a "Rename" button SHALL be visible.
+> - WHEN the user clicks the "Rename" button
+> - THEN a modal SHALL appear prompting for a new pseudo.
+> - WHEN the user submits a new pseudo
+> - THEN the system SHALL validate that the pseudo is not already in use by another active user in the list.
+> - THEN the system SHALL update the user's pseudo for the current session.
+> - THEN all other users SHALL see the new pseudo in real-time.
+> - WHEN the user has claimed items (orange state)
+> - THEN the item tags SHALL update to display the new pseudo.
+> - WHEN the user is NOT in Shopping Mode
+> - THEN the "Rename" button SHALL NOT be visible.
+
+### R. Special Features
+
+#### R23. Easter Egg — Christmas Cat Animation (List P7XELY Only)
+> **User Story:** As a user on list P7XELY, I want to see a special Christmas animation when adding "Chat" so that I receive a delightful surprise.
+> **Acceptance Criteria:**
+> - WHEN the current list ID is exactly "P7XELY"
+> - AND a user adds an item with the exact name "Chat"
+> - THEN the system SHALL trigger a Christmas-themed animation visible only to the user who added the item.
+> - THEN the animation SHALL include:
+>   - Falling snowflakes across the screen
+>   - An animated cat popping out of a gift box
+>   - Text overlay: "Ton bibou t'offre un petit chat pour Noël"
+> - THEN the animation SHALL NOT block or interfere with real-time editing or shopping mode functionality.
+> - WHEN the list ID is NOT "P7XELY"
+> - THEN no special animation SHALL occur, even if an item named "Chat" is added.
+> - WHEN the item is added to list P7XELY but the name is not exactly "Chat" (case-sensitive)
+> - THEN no animation SHALL occur.
 
 
