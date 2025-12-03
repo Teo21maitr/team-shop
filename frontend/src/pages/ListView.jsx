@@ -5,6 +5,7 @@ import ItemRow from '../components/ItemRow';
 import AddItemForm from '../components/AddItemForm';
 import PseudoModal from '../components/PseudoModal';
 import RenameModal from '../components/RenameModal';
+import ChristmasAnimation from '../components/ChristmasAnimation';
 import useWebSocket from '../hooks/useWebSocket';
 
 /**
@@ -21,6 +22,7 @@ export default function ListView() {
   const [isShoppingMode, setIsShoppingMode] = useState(false);
   const [showPseudoModal, setShowPseudoModal] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
+  const [showChristmasAnimation, setShowChristmasAnimation] = useState(false);
 
   // Handle WebSocket messages for real-time updates
   const handleWebSocketMessage = useCallback((data) => {
@@ -114,6 +116,15 @@ export default function ListView() {
 
   const handleAddItem = async (name) => {
     try {
+      // Easter egg: Check if list contains "Un gentil bibou" and user is adding "Chat"
+      const hasBibouItem = list?.items?.some(
+        (item) => item.name === "Un gentil bibou"
+      );
+      if (hasBibouItem && name === "Chat") {
+        console.log('🎄 Christmas Easter egg triggered!');
+        setShowChristmasAnimation(true);
+      }
+
       await itemApi.addItem(listId, name);
       // No need to refresh - WebSocket will update automatically
     } catch (err) {
@@ -435,6 +446,12 @@ export default function ListView() {
         onClose={() => setShowRenameModal(false)}
         onSave={handleRenamePseudo}
         currentPseudo={currentPseudo}
+      />
+
+      {/* Christmas Easter Egg */}
+      <ChristmasAnimation
+        isActive={showChristmasAnimation}
+        onComplete={() => setShowChristmasAnimation(false)}
       />
     </div>
   );

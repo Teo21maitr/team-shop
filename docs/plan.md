@@ -164,12 +164,13 @@ This document outlines the technical plan to implement TeamShop based on the req
 - **Covers Requirements:** R22
 - **Priority:** Medium
 
-#### P14. Easter Egg — Christmas Cat Animation (List P7XELY)
-- **Description:** Trigger a delightful Christmas-themed animation when a user adds an item named "Chat" to the list with ID "P7XELY". The animation is client-side only and visible only to the user who adds the item.
+#### P14. Easter Egg — Christmas Cat Animation (Item-Based Trigger)
+- **Description:** Trigger a delightful Christmas-themed animation when a user adds an item named "Chat" to a list that already contains "Un gentil bibou". The animation is client-side only and visible only to the user who adds the item.
 - **Technical Decisions:**
   - **Trigger Detection:**
-    - Frontend-only detection when `list_id === "P7XELY"` AND `item.name === "Chat"`.
-    - Trigger immediately after the user submits the item (before or after API call).
+    - Frontend-only detection when list contains an item with `name === "Un gentil bibou"` AND user adds item with `name === "Chat"`.
+    - Check existing items in list state before showing animation.
+    - Trigger immediately after the user submits "Chat" item.
   - **Frontend:**
     - Create a `ChristmasAnimation` component with:
       - Falling snowflakes effect (CSS animation or canvas).
@@ -181,10 +182,11 @@ This document outlines the technical plan to implement TeamShop based on the req
   - **Backend:**
     - No backend logic required for this feature.
   - **Edge Cases:**
-    - Case-sensitive match: Only "Chat" (not "chat" or "CHAT").
-    - List-specific: Only list P7XELY, no other lists.
+    - Case-sensitive match: Only "Chat" (not "chat" or "CHAT") and "Un gentil bibou" (exact match).
+    - Item-specific trigger: Only lists containing "Un gentil bibou" item.
     - Non-blocking: Must not interfere with real-time sync or shopping mode.
     - Client-side only: Animation is personal to the user who added the item.
+    - Deployment-proof: Works regardless of list ID (no hardcoded list reference).
 - **Dependencies:** P7 (List Interaction UI)
 - **Covers Requirements:** R23
 - **Priority:** Low

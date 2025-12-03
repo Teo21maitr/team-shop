@@ -1,0 +1,167 @@
+/* ChristmasAnimation.css */
+/* Christmas Easter Egg Animation Styles */
+
+.christmas-animation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.christmas-animation-overlay.appearing {
+    opacity: 1;
+}
+
+.christmas-animation-overlay.fading {
+    opacity: 0;
+}
+
+/* Snowflakes */
+.snowflakes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.snowflake {
+    position: absolute;
+    top: -10%;
+    font-size: 1.5rem;
+    color: #ffffff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+/* Gift Box and Cat */
+.gift-box-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.gift-box {
+    font-size: 6rem;
+    animation: giftShake 0.5s ease-in-out 0.5s;
+}
+
+.cat {
+    font-size: 5rem;
+    opacity: 0;
+    transform: scale(0) translateY(50px);
+    animation: catPopOut 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1s forwards;
+}
+
+@keyframes giftShake {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-10deg);
+    }
+    75% {
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes catPopOut {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(50px);
+    }
+    50% {
+        transform: scale(1.2) translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Christmas Message */
+.christmas-message {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem 2rem;
+    border-radius: 1rem;
+    opacity: 0;
+    animation: messageAppear 0.5s ease-in-out 1.8s forwards;
+}
+
+.christmas-message p {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes messageAppear {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .gift-box {
+        font-size: 4rem;
+    }
+    
+    .cat {
+        font-size: 3.5rem;
+    }
+    
+    .christmas-message p {
+        font-size: 1rem;
+        padding: 1rem 1.5rem;
+    }
+    
+    .snowflake {
+        font-size: 1.25rem;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .snowflake {
+        animation-duration: 10s;
+    }
+    
+    .cat {
+        animation-duration: 0.3s;
+    }
+    
+    .gift-box {
+        animation: none;
+    }
+}

@@ -193,20 +193,20 @@ TeamShop is a **mobile-first web application** designed to streamline the grocer
 
 ### R. Special Features
 
-#### R23. Easter Egg — Christmas Cat Animation (List P7XELY Only)
-> **User Story:** As a user on list P7XELY, I want to see a special Christmas animation when adding "Chat" so that I receive a delightful surprise.
+#### R23. Easter Egg — Christmas Cat Animation (Presence-Based Trigger)
+> **User Story:** As a user in a list containing "Un gentil bibou", I want to see a special Christmas animation when adding "Chat" so that I receive a delightful surprise.
 > **Acceptance Criteria:**
-> - WHEN the current list ID is exactly "P7XELY"
-> - AND a user adds an item with the exact name "Chat"
+> - WHEN the current list contains an item named exactly "Un gentil bibou" (case-sensitive)
+> - AND a user adds an item with the exact name "Chat" (case-sensitive)
 > - THEN the system SHALL trigger a Christmas-themed animation visible only to the user who added the item.
 > - THEN the animation SHALL include:
 >   - Falling snowflakes across the screen
 >   - An animated cat popping out of a gift box
 >   - Text overlay: "Ton bibou t'offre un petit chat pour Noël"
 > - THEN the animation SHALL NOT block or interfere with real-time editing or shopping mode functionality.
-> - WHEN the list ID is NOT "P7XELY"
+> - WHEN the list does NOT contain "Un gentil bibou"
 > - THEN no special animation SHALL occur, even if an item named "Chat" is added.
-> - WHEN the item is added to list P7XELY but the name is not exactly "Chat" (case-sensitive)
+> - WHEN the item is added but the name is not exactly "Chat" (case-sensitive)
 > - THEN no animation SHALL occur.
 
 
